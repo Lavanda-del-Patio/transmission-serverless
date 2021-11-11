@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lavanda-transmission-serverless"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-7lno1r3muddd"
+s3_prefix = "lavanda-transmission-serverless"
+region = "eu-west-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

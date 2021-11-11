@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: lavanda-transmission-serverless
+Resources:
+  SendTorrent:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Description: 'transmission'
+      FunctionName: lavanda-transmission-send-torrent
+      MemorySize: 128
+      Timeout: 10
+      Role: 'arn:aws:iam::836783797541:role/Lambda-SNS-transmission-role'
+      Events:
+        SQS1:
+          Type: SQS
+          Properties:
+            Queue:
+              'Fn::GetAtt':
+                - SQSQueueTransmission
+                - Arn
+            BatchSize: 1
+      Environment:
+        Variables:
+          TRANSMISSION_HOST: 'transmission.lavandadelpatio.es' 
+          TRANSMISSION_PORT: '443'
+          TRANSMISSION_USER: 'admin'
+          TRANSMISSION_PASSWORD: 'TransmissionPass25'  
+          TRANSMISSION_URL_RPC: '/transmission/rpc'   
+          TOPIC_ARN: 'arn:aws:sns:eu-west-1:836783797541:telegram-message'
+  SQSQueueTransmission:
+    Type: 'AWS::SQS::Queue'
+    Properties: 
+      QueueName: transmission-pro
